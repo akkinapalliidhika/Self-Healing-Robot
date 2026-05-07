@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Self-Healing River Robot — Akkinapalli Idhika</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar" id="navbar">
+  <div class="nav-brand">
+    <span class="nav-icon">🤖</span>
+    <span class="nav-title">RIVER<span class="accent">ROBOT</span></span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#simulation">Simulation</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#dataset">Dataset</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-scan-line"></div>
+  <div class="hero-content">
+    <div class="hero-badge">⚡ ENVIRONMENTAL ROBOTICS PROJECT</div>
+    <h1 class="hero-title">
+      SELF-HEALING<br/>
+      <span class="hero-title-accent">RIVER ROBOT</span>
+    </h1>
+    <p class="hero-sub">Dataset-driven autonomous robot simulation for real-time river pollution detection, classification and remediation planning.</p>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-n">36</span><span class="hstat-l">km Length</span></div>
+      <div class="hstat"><span class="hstat-n">14</span><span class="hstat-l">m Width</span></div>
+      <div class="hstat"><span class="hstat-n">504</span><span class="hstat-l">Grid Cells</span></div>
+      <div class="hstat"><span class="hstat-n">7</span><span class="hstat-l">Pollution Types</span></div>
+    </div>
+    <div class="hero-cta">
+      <a href="#simulation" class="btn btn-primary">▶ Launch Simulation</a>
+      <a href="#dataset" class="btn btn-ghost">📊 View Dataset</a>
+    </div>
+  </div>
+  <div class="hero-robot-visual">
+    <div class="robot-orb">
+      <div class="orb-ring r1"></div>
+      <div class="orb-ring r2"></div>
+      <div class="orb-ring r3"></div>
+      <div class="orb-core">🤖</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SIMULATION ── -->
+<section class="section" id="simulation">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">Interactive Demo</p>
+      <h2 class="section-title">River Simulation</h2>
+      <p class="section-sub">Click any cell on the grid to view real sensor readings from the CSV dataset and the remediation plan.</p>
+    </div>
+
+    <div class="sim-layout">
+      <!-- Controls -->
+      <div class="sim-controls">
+        <div class="ctrl-card">
+          <label class="ctrl-label">ROBOT SPEED</label>
+          <input type="range" id="speedSlider" min="1" max="5" value="3" class="slider"/>
+          <div class="slider-ticks">
+            <span>SLOW</span><span></span><span>MID</span><span></span><span>FAST</span>
+          </div>
+          <div class="speed-display" id="speedDisplay">3</div>
+        </div>
+        <div class="ctrl-card">
+          <label class="ctrl-label">CONTROLS</label>
+          <button class="ctrl-btn" id="btnStart">▶ START</button>
+          <button class="ctrl-btn secondary" id="btnReset">↺ RESET</button>
+          <button class="ctrl-btn secondary" id="btnPause">⏸ PAUSE</button>
+        </div>
+        <div class="ctrl-card">
+          <label class="ctrl-label">ENVIRONMENT</label>
+          <div class="env-info"><span>Season:</span><span class="env-val">Spring</span></div>
+          <div class="env-info"><span>Weather:</span><span class="env-val">Rain</span></div>
+          <div class="env-info"><span>Mode:</span><span class="env-val accent">CSV Dataset</span></div>
+        </div>
+        <div class="ctrl-card legend-card">
+          <label class="ctrl-label">LEGEND</label>
+          <div class="legend-item"><span class="dot dot-clean"></span>Clean</div>
+          <div class="legend-item"><span class="dot dot-low"></span>Low (Caution)</div>
+          <div class="legend-item"><span class="dot dot-med"></span>Medium (Serious)</div>
+          <div class="legend-item"><span class="dot dot-high"></span>High (Critical)</div>
+          <div class="legend-item"><span class="dot dot-obs"></span>Obstacle</div>
+          <div class="legend-item"><span class="dot dot-robot"></span>Robot</div>
+        </div>
+      </div>
+
+      <!-- Grid + Panel -->
+      <div class="sim-center">
+        <div class="status-bar" id="statusBar">
+          <span id="sb-step">STEP: 0</span>
+          <span id="sb-scan">SCAN: 0%</span>
+          <span id="sb-battery">BATTERY: 100%</span>
+          <span id="sb-pos">POS: (1,1)</span>
+          <div class="spd-pips" id="spdPips">
+            <span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span>
+          </div>
+        </div>
+        <div class="grid-wrapper">
+          <div class="grid-label-x">River Flow  →  (km)</div>
+          <div class="grid-label-y">Width (m)</div>
+          <canvas id="riverCanvas" width="900" height="350"></canvas>
+          <div class="grid-obstacles-label">▲ Obstacles: Rock Outcrop × 3 · Bridge Pylon × 1 · Debris Jam × 1</div>
+        </div>
+      </div>
+
+      <!-- Dashboard -->
+      <div class="sim-dashboard" id="dashboard">
+        <div class="dash-title">MISSION CONTROL</div>
+        <div class="dash-section">
+          <div class="dash-label">POLLUTION BREAKDOWN</div>
+          <div class="bar-chart" id="pollutionChart">
+            <div class="bar-item">
+              <div class="bar-track"><div class="bar-fill clean-fill" id="b0" style="height:0%"></div></div>
+              <span class="bar-val" id="v0">—</span>
+              <span class="bar-lbl">Clean</span>
+            </div>
+            <div class="bar-item">
+              <div class="bar-track"><div class="bar-fill low-fill" id="b1" style="height:0%"></div></div>
+              <span class="bar-val" id="v1">—</span>
+              <span class="bar-lbl">Low</span>
+            </div>
+            <div class="bar-item">
+              <div class="bar-track"><div class="bar-fill med-fill" id="b2" style="height:0%"></div></div>
+              <span class="bar-val" id="v2">—</span>
+              <span class="bar-lbl">Med</span>
+            </div>
+            <div class="bar-item">
+              <div class="bar-track"><div class="bar-fill high-fill" id="b3" style="height:0%"></div></div>
+              <span class="bar-val" id="v3">—</span>
+              <span class="bar-lbl">High</span>
+            </div>
+          </div>
+        </div>
+        <div class="dash-section">
+          <div class="dash-label">LIVE SENSOR READINGS</div>
+          <div class="sensor-row"><span class="sensor-name">pH</span><div class="sensor-bar-wrap"><div class="sensor-bar" id="pH-bar"></div><div class="sensor-ideal" id="pH-ideal"></div></div><span class="sensor-val" id="pH-val">—</span></div>
+          <div class="sensor-row"><span class="sensor-name">DO mg/L</span><div class="sensor-bar-wrap"><div class="sensor-bar do-bar" id="do-bar"></div></div><span class="sensor-val" id="do-val">—</span></div>
+          <div class="sensor-row"><span class="sensor-name">Turb NTU</span><div class="sensor-bar-wrap"><div class="sensor-bar tu-bar" id="tu-bar"></div></div><span class="sensor-val" id="tu-val">—</span></div>
+          <div class="sensor-row"><span class="sensor-name">Temp °C</span><div class="sensor-bar-wrap"><div class="sensor-bar tm-bar" id="tm-bar"></div></div><span class="sensor-val" id="tm-val">—</span></div>
+          <div class="wqi-row"><span class="wqi-label">WQI:</span><span class="wqi-val" id="wqiVal">—</span></div>
+        </div>
+        <div class="dash-section">
+          <div class="dash-label">ROBOT STATUS</div>
+          <div class="gauges">
+            <div class="gauge-wrap">
+              <svg viewBox="0 0 80 50" class="gauge-svg">
+                <path d="M10,45 A35,35 0 0,1 70,45" stroke="#0a2040" stroke-width="8" fill="none"/>
+                <path d="M10,45 A35,35 0 0,1 70,45" id="battGauge" stroke="#00e676" stroke-width="8" fill="none" stroke-dasharray="110" stroke-dashoffset="0" stroke-linecap="round"/>
+              </svg>
+              <div class="gauge-val" id="battVal">100%</div>
+              <div class="gauge-lbl">BATTERY</div>
+            </div>
+            <div class="gauge-wrap">
+              <svg viewBox="0 0 80 50" class="gauge-svg">
+                <path d="M10,45 A35,35 0 0,1 70,45" stroke="#0a2040" stroke-width="8" fill="none"/>
+                <path d="M10,45 A35,35 0 0,1 70,45" id="covGauge" stroke="#00c6ff" stroke-width="8" fill="none" stroke-dasharray="110" stroke-dashoffset="110" stroke-linecap="round"/>
+              </svg>
+              <div class="gauge-val" id="covVal">0%</div>
+              <div class="gauge-lbl">COVERAGE</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info Panel (click cell) -->
+    <div class="info-panel hidden" id="infoPanel">
+      <button class="info-close" id="infoClose">✕</button>
+      <div class="info-title" id="infoTitle">Cell Info</div>
+      <div class="info-grid">
+        <div class="info-sensors" id="infoSensors"></div>
+        <div class="info-remediation" id="infoRemediation"></div>
+      </div>
+    </div>
+
+    <!-- Complete overlay -->
+    <div class="complete-overlay hidden" id="completeOverlay">
+      <div class="complete-box">
+        <div class="complete-icon">✅</div>
+        <h3>ENVIRONMENTAL SCAN COMPLETE</h3>
+        <p id="completeSummary"></p>
+        <button class="btn btn-primary" id="btnRestartComplete">↺ Run Again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section class="section about-section" id="about">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">Project Overview</p>
+      <h2 class="section-title">About This Project</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>This project simulates an autonomous <strong>self-healing river cleaning robot</strong> that navigates a 36×14 km river grid, scanning each cell for pollution using real sensor data loaded from a CSV dataset.</p>
+        <p>The robot classifies pollution into 7 types and 3 severity levels, then generates a detailed <strong>site-specific remediation plan</strong> for each affected cell including estimated cost, timeline, and step-by-step treatment actions.</p>
+        <div class="tech-tags">
+          <span class="tech">MATLAB</span>
+          <span class="tech">Data Visualisation</span>
+          <span class="tech">Robotics Simulation</span>
+          <span class="tech">Environmental Engineering</span>
+          <span class="tech">CSV Dataset</span>
+          <span class="tech">Autonomous Navigation</span>
+        </div>
+      </div>
+      <div class="feature-cards">
+        <div class="feat-card">
+          <div class="feat-icon">🗺️</div>
+          <h4>Autonomous Navigation</h4>
+          <p>Boustrophedon (snake) path planner with obstacle avoidance — rock outcrops, bridge pylons, debris jams.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">📡</div>
+          <h4>Real Sensor Data</h4>
+          <p>Reads pH, dissolved oxygen, turbidity, and temperature from a 504-cell CSV dataset with status flags.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">🧪</div>
+          <h4>7 Pollution Types</h4>
+          <p>Agricultural runoff, industrial discharge, plastic waste, sewage, oil spills, thermal pollution, mining acid drainage.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-icon">💊</div>
+          <h4>Remediation Plans</h4>
+          <p>Each polluted cell gets a site-specific, multi-step clean-up plan with cost estimates and compliance timelines.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DATASET ── -->
+<section class="section dataset-section" id="dataset">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-tag">Raw Data</p>
+      <h2 class="section-title">Dataset Preview</h2>
+      <p class="section-sub">First 20 rows of <code>all_pollution_types_dataset.csv</code> — 504 rows total.</p>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table" id="dataTable">
+        <thead>
+          <tr>
+            <th>Row</th><th>Col</th><th>Level</th><th>Type</th>
+            <th>Severity</th><th>pH</th><th>DO mg/L</th>
+            <th>Turbidity</th><th>Temp °C</th>
+          </tr>
+        </thead>
+        <tbody id="dataTableBody">
+          <tr><td colspan="9" style="text-align:center;color:#555">Loading dataset...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="nav-icon">🤖</span>
+      <span class="nav-title">RIVER<span class="accent">ROBOT</span></span>
+    </div>
+    <p class="footer-copy">© 2025 Self-Healing River Robot · Built by <strong>Akkinapalli Idhika</strong></p>
+    <p class="footer-copy" style="font-size:0.75rem;margin-top:0.25rem;color:#444">MATLAB Simulation · Environmental Robotics · AIE24201</p>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
