@@ -1,4 +1,4 @@
-# River Pollution Monitoring Robot
+# Self Healing Robot
 
 This project is a River Pollution Monitoring Robot system developed to analyze and monitor pollution levels in river and lake water bodies.
 
