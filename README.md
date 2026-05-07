@@ -1,133 +1,96 @@
- Self-Healing River Robot — Web Simulation
+# River Pollution Monitoring Robot
 
-An interactive, dataset-driven web simulation of an autonomous river-cleaning robot that navigates a 36 × 14 km river grid, scanning each cell for pollution using real sensor data and generating site-specific remediation plans.
+This project is a River Pollution Monitoring Robot system developed to analyze and monitor pollution levels in river and lake water bodies.
 
-Project by: Akkinapalli Idhika · AIE24201
+Initially, I developed the project in MATLAB for pollution analysis and environmental data processing. Later, I converted the project into a website using HTML, CSS, and JavaScript to make the system more interactive, accessible, and user-friendly.
 
- Table of Contents
+The main idea of this project is to simulate a smart robot that moves around a river or lake area, monitors water quality conditions, and identifies pollution levels in different regions.
 
-Overview
-Live Demo
-Features
-Project Structure
-Getting Started
-How It Works
-Dataset
-Tech Stack
-Screenshots
-License
+For this project, I used an environmental dataset collected from a National Park in Delhi. Since the dataset belongs to a protected national park area, many water regions are comparatively cleaner than heavily polluted urban rivers. The robot analyzes the dataset values and classifies the pollution severity accordingly.
 
+The robot continuously monitors the water and displays pollution information visually on the website. It helps users understand the environmental condition of the river in an interactive way.
 
- Overview
-The Self-Healing River Robot simulates an autonomous environmental robot navigating a digitized river environment. The robot scans every grid cell using real water quality sensor data loaded from a CSV dataset, classifies the type and severity of pollution found, and produces a detailed, cell-specific remediation plan — including estimated cost, compliance timeline, and step-by-step treatment actions.
-The project originated as a MATLAB-based robotics simulation and was rebuilt as a fully interactive browser application using HTML5 Canvas and Vanilla JavaScript — requiring no server, build tool, or external dependency to run.
+## Project Objectives
 
- Live Demo
-GitHub Pages deployment:
-https://<YOUR_USERNAME>.github.io/RiverRobot
-To enable GitHub Pages:
+- Monitor river and lake pollution levels
+- Create awareness about environmental pollution
+- Simulate an intelligent water-monitoring robot
+- Visualize pollution analysis using a web interface
+- Make environmental monitoring systems easier to understand and access
 
-Push the repository to GitHub.
-Go to Settings → Pages.
-Set Source to main branch, root folder (/).
-The site will be live within a few minutes.
+## Features
 
- Features
-FeatureDescription Live Canvas SimulationAnimated robot navigating the full 36 × 14 river grid using a boustrophedon (snake) path planner📊 Real CSV Dataset504 grid cells with real pH, dissolved oxygen, turbidity, and temperature readings🧪 7 Pollution TypesAgricultural Runoff, Industrial Discharge, Plastic Waste, Sewage & Pathogens, Oil Spill, Thermal Pollution, Mining Acid Drainage🚦 3 Severity LevelsLow (Caution), Medium (Serious), High (Critical)🖱️ Interactive Cell InspectionClick any grid cell to view its raw sensor readings and a full remediation plan⚡ Adjustable SpeedSlider control from Slow (200 ms/step) to Fast (20 ms/step)📡 Live Mission DashboardBattery gauge, coverage gauge, live sensor bars, Water Quality Index (WQI), and pollution breakdown chart🪨 Obstacle AvoidanceRock Outcrops × 3, Bridge Pylon × 1, Debris Jam × 1 hardcoded into the grid📱 Responsive DesignWorks on desktop and mobile browsers💊 Remediation PlansEach polluted cell gets a multi-step, sensor-value-aware clean-up plan with cost estimates
+- Smart robot movement simulation
+- Pollution monitoring system
+- Pollution classification analysis
+- Interactive pollution visualization
+- Dataset-based environmental monitoring
+- User-friendly website interface
+- Real-time style monitoring display
+- Pollution severity indication
 
- Project Structure
-RiverRobot/
-│
-├── index.html          # Main HTML page — navbar, simulation canvas, dataset preview, about section
-├── style.css           # Dark sci-fi / tech theme with CSS variables, animations, responsive layout
-├── script.js           # Core simulation engine: path planner, canvas renderer, dashboard, info panel
-├── data.js             # CSV dataset embedded as a JavaScript constant (auto-generated from dataset.csv)
-├── dataset.csv         # Original sensor dataset — 504 rows × 14 columns
-└── README.md           # This file
-Why data.js exists separately
-The browser cannot load a local .csv file via fetch() when opening index.html directly from the file system (CORS restriction). data.js pre-embeds the parsed CSV as a JS array (CSV_DATA), so the simulation works with a simple double-click on index.html — no web server needed.
+## Pollution Classification
 
- Getting Started
-Option 1 — Open locally (no server required)
-bash# Clone the repository
-git clone https://github.com/<YOUR_USERNAME>/RiverRobot.git
+The robot classifies water conditions into categories such as:
 
-# Navigate into the folder
-cd RiverRobot
+- Low Pollution
+- Moderate Pollution
+- High Pollution
+- Critical Pollution
 
-# Open directly in your browser
-open index.html        # macOS
-start index.html       # Windows
-xdg-open index.html    # Linux
-Option 2 — Serve with a local dev server (optional)
-bash# Using Python
-python -m http.server 8000
+The classification is based on environmental parameters from the dataset.
 
-# Using Node.js (npx)
-npx serve .
-Then open http://localhost:8000 in your browser.
-Option 3 — GitHub Pages (recommended for sharing)
-See the Live Demo section above.
+## Technologies Used
 
-⚙️ How It Works
-1. Grid Construction
-On page load, script.js reads the CSV_DATA array from data.js and populates two 14 × 36 matrices:
+### MATLAB
+Used for:
+- Pollution data analysis
+- Data processing
+- Classification logic
+- Environmental calculations
 
-grid — stores pollution level (0–3) and pollution type for each cell.
-sensorGrid — stores the four raw sensor readings (pH, DO, turbidity, temperature) per cell.
+### Web Technologies
+Used for converting the system into a website:
+- HTML
+- CSS
+- JavaScript
 
-2. Path Planning
-The robot follows a boustrophedon (lawnmower / snake) path — traversing row 0 left-to-right, row 1 right-to-left, and so on. Cells marked as obstacles are skipped automatically.
-3. Canvas Rendering
-Each simulation step:
+## Dataset Information
 
-Draws the water background gradient.
-Colours each cell by pollution severity (colour-coded: blue = clean, green = low, orange = medium, red = high, purple = obstacle).
-Renders a fading trail behind the robot.
-Draws the robot as a glowing cyan circle with a scan beam.
+The dataset used in this project is taken from a National Park in Delhi for environmental pollution analysis and monitoring purposes.
 
-4. Dashboard Updates
-Every 6 steps, the Mission Control panel refreshes:
+The dataset contains environmental and water-quality related information used by the robot to determine pollution levels.
 
-Pollution breakdown bar chart (count of clean/low/medium/high cells).
-Sensor readings for the robot's current cell with colour-coded status flags.
-Water Quality Index (WQI) — percentage of the four parameters within ideal ranges.
-Battery and coverage semi-circular gauges.
+## Working of the System
 
-5. Cell Inspection (Click-to-Inspect)
-Clicking any canvas cell opens a pop-up panel showing:
+1. The robot moves around the river/lake area.
+2. It scans and monitors pollution data from different locations.
+3. The system analyzes water-quality parameters.
+4. Pollution levels are classified into different categories.
+5. Results are displayed visually on the website dashboard.
 
-Raw sensor values from the CSV with status labels (Normal / Low / Elevated / etc.).
-Estimated remediation cost and compliance timeline.
-A type × severity specific remediation plan (7 pollution types × 3 severity levels = 21 distinct plan templates), each incorporating the cell's actual sensor readings into the action steps.
+## Why I Converted it into a Website
 
-6. Obstacles
-Five fixed obstacles are placed in the grid (rock outcrops, a bridge pylon, and a debris jam). The path planner skips these cells; they are rendered in purple with a label.
+I converted the MATLAB project into a website to improve accessibility and usability. A web-based system makes the project easier to interact with, visually understand, and demonstrate to users without requiring MATLAB software.
 
-Dataset
-File: dataset.csv / data.js
-Rows: 504 (14 rows × 36 columns)
-Source: Synthetic sensor data generated for MATLAB robotics simulation
-ColumnDescriptionIdeal RangeRowGrid row position (1–14)—ColGrid column position (1–36)—Pollution_LevelSeverity code: 0 = Clean, 1 = Low, 2 = Medium, 3 = High—Pollution_Type_IDNumeric type code (0–7)—Pollution_TypeType name (e.g., Agricultural_Runoff)—SeverityLabel (Clean / Low_Caution / Medium_Serious / High_Critical)—pHWater acidity / alkalinity6.5 – 8.5pH_StatusNormal / Acidic / Alkaline—DO_mgLDissolved oxygen (mg/L)> 6 mg/LDO_StatusGood / Low / Hypoxic—Turbidity_NTUWater clarity (NTU)< 25 NTUTurbidity_StatusNormal / Elevated / Very High—Temperature_CWater temperature (°C)8 – 20 °CTemp_StatusNormal / Too Warm / Cold—
-Pollution Type Distribution
-IDTypeCharacteristic Signature1Agricultural RunoffHigh pH (8.1–8.4), elevated turbidity2Industrial DischargeLow pH (3.4–5.1), very high turbidity, low DO3Plastic / Solid WasteNear-normal chemistry, elevated turbidity4Sewage & PathogensLow pH (4.8–6.7), very low DO, high turbidity5Oil / Hydrocarbon SpillNear-normal pH, reduced DO, low turbidity6Thermal PollutionNormal pH/turbidity, elevated temperature, reduced DO7Mining Acid DrainageVery low pH (3.0–5.0), high turbidity
+The website provides a better user experience with interactive visuals and real-time simulation effects.
 
-Tech Stack
-TechnologyRoleHTML5 CanvasGrid rendering and robot animationVanilla JavaScript (ES6)Simulation engine, path planner, dashboard logicCSS3Dark sci-fi theme, CSS variables, keyframe animations, responsive layoutGoogle FontsShare Tech Mono (monospace UI), Exo 2 (body text)MATLAB (original)Source simulation used to design the grid logic and datasetCSVRaw sensor data (504 cells × 14 columns)
-No frameworks, no bundlers, no dependencies. Everything runs from static files.
+## Future Improvements
 
- Remediation Plan Logic
-The getRemediationSteps(pollutionType, severityLevel, sensorReadings) function in script.js maps each of the 21 type × severity combinations to a specific, multi-step treatment plan. Each step references the cell's actual sensor values (e.g., "DO = 1.2 mg/L — deploy aerators IMMEDIATELY"), making every plan contextually accurate rather than generic.
-Remediation plans include:
+- AI-based pollution prediction
+- Real-time IoT sensor integration
+- GPS tracking system
+- Live environmental monitoring
+- Advanced robot navigation
+- Cloud database integration
+- Mobile application support
 
-Immediate containment actions
-Chemical or biological treatment methods
-Compliance monitoring timelines
-Estimated cost (computed from severity level and pollution type)
-Emergency escalation steps for High (Critical) severity cells
+## Conclusion
 
- License
-© 2025 Akkinapalli Idhika · Environmental Robotics · AIE24201
-This project was built for academic and demonstration purposes. Feel free to fork, adapt, and build upon it with attribution.
+This project demonstrates how robotics, environmental monitoring, and web technologies can be combined to create a smart river pollution monitoring system. It helps in understanding pollution conditions and promotes awareness about protecting water resources.
 
-Built with HTML5 Canvas · Vanilla JS · CSS3 · Real Sensor Data
+## Author
+
+Akkinapalli Idhika
+B.Tech – Computer Science with Artificial Intelligence
+Amrita Vishwa Vidyapeetham
